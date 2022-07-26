@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window"],
+    "strict": true,
+    "noImplicitAny": false
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-unused-vars", "no-explicit-any", "require-await"]
+    }
+  },
+  "fmt": {
+    "options": {
+      "useTabs": true,
+      "indentWidth": 2
+    }
+  },
+  "tasks": {
+    "start": "deno run -A --watch index.ts"
+  },
+  "importMap": "./import_map.json"
+}
