@@ -14,10 +14,7 @@ export default () => {
     ctx.query = {};
     ctx.url.searchParams.forEach((val, key) => ctx.query[key] = val);
 
-    ctx.body = await ctx.request.text();
-    ctx.body = await trying(() => JSON.parse(ctx.body)).catch(() => ctx.body);
-
-    ctx.method = ctx.request.method;
+    ctx.method = ctx.request.method.toLowerCase();
 
 
 
@@ -29,9 +26,23 @@ export default () => {
 
   });
 
+  // 解析body
+  use(async ctx => {
+    if (["get", "delete"].includes(ctx.method)) return;
+
+    const contentType = ctx.request.headers.get("Content-Type") ?? "";
+    if (contentType.indexOf("multipart/form-data") != -1) {
+      ctx.body = await ctx.request.formData();
+    }
+    else {
+      ctx.body = await ctx.request.text();
+      ctx.body = await trying(() => JSON.parse(ctx.body)).catch(() => ctx.body);
+    }
+  })
+
   error(async ctx => {
-    ctx.data = ctx.error.message;
-    ctx.status = 500;
+    ctx.data ??= ctx.error.message;
+    ctx.status ??= 500;
   });
 
   final(async ctx => {
@@ -57,12 +68,9 @@ export default () => {
       : "text/plain"
       ctx.headers.set("content-type", contentType + ";charset=utf-8");
     }
-    console.log(toString(ctx.data))
   });
 
   return {
-
-    
     use, error, final, plugin,
     listen: async (options = <ServeInit>{ port: 4396 }) => serve(async request => {
       const ctx = <ctx>{ request };

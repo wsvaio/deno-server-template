@@ -11,7 +11,7 @@ export default (path="") => {
       const urlMatched = regUrl.exec(url) ?? [];
       middleware.forEach(fn => use(async (ctx, next) => {
         const pathname = ctx.url.pathname;
-        if (!regUrl.test(pathname) || ctx.method.toLowerCase() != method) return await next();
+        if (!regUrl.test(pathname) || ctx.method != method) return await next();
         const pathMatched = regUrl.exec(pathname) ?? [];
         for (let i = 1; i < pathMatched.length; i++) ctx.param[urlMatched[i].substring(1)] = pathMatched[i];
         const auto = fn.length <= 1;

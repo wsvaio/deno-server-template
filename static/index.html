@@ -1,1 +1,57 @@
-<h1>Hello World !</h1>
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WS</title>
+</head>
+<body>
+  
+
+  <h1>Hello World ！</h1>
+
+  <input type="file" oninput="handlerInput()" multiple>
+
+  <img>
+
+  <button onclick="test()">test</button>
+
+  <script>
+
+    const fileInput = document.querySelector("input");
+    const img = document.querySelector("img");
+    
+
+    function handlerInput() {
+      const { files } = fileInput;
+
+      const formData = new FormData();
+      for (const file of files) {
+        formData.append("files", file);
+      }
+
+      
+
+      fetch("/upload", {
+        method: "POST",
+        body: formData
+      })
+      
+    }
+
+    function test() {
+      fetch("/upload", {
+        method: "POST",
+        // body: formData
+      })
+    }
+
+
+    
+
+
+  </script>
+
+</body>
+</html>

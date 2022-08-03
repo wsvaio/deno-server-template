@@ -1,0 +1,2 @@
+[2022/8/3 15:24:27] 200 get /index.html?abc=1 [object Undefined] [object Uint8Array] 
+[2022/8/3 15:24:27] 404 get /favicon.ico [object Undefined] [object String] 

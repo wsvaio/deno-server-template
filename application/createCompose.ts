@@ -1,5 +1,5 @@
 // middleware 执行器
-export type middleware<ctx = any> = (ctx: ctx, next: () => void) => Promise<any>;
+export type middleware<ctx = any> = (ctx: ctx, next: () => Promise<any>) => Promise<any>;
 export type plugins<ctx = any> = { useList: middleware<ctx>[], errorList: middleware<ctx & { error: Error; }>[], finalList: middleware<ctx & { error?: Error; }>[]; }[];
 // 洋葱模型运行机制
 export async function onion(ctx: any, ...middleware: middleware[]) {
