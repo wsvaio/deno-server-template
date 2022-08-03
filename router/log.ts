@@ -9,7 +9,7 @@ router.get("/", async ctx => ctx.data = [...Deno.readDirSync("./static/log")].ma
 
 router.final(async ctx => {
   
-  const text = `[${new Date().toLocaleString()}] ${ctx.status ?? 200} ${ctx.method} ${ctx.url.pathname}${ctx.url.search} ${toString(ctx.body)} ${toString(ctx.data)} `;
+  const text = `[${new Date().toLocaleString()}] ${ctx.method} ${toString(ctx.body)} ${ctx.url.pathname}${ctx.url.search} ${ctx.status ?? 200} ${toString(ctx.data)}`;
   Deno.writeTextFile(`./static/log/${new Date().toLocaleDateString().replaceAll("/", "-")}.log`, text + "\n", {append: true});
   console.log(text);
 

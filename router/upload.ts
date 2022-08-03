@@ -24,8 +24,13 @@ router.post("/", async ctx => {
   
 });
 
-router.get("/", async ctx => ctx.data = [...Deno.readDirSync("./static/upload")].map(item => item.name));
+router.del("/*", async ctx => {
+  await Deno.remove("./static" + ctx.url.pathname);
+  ctx.data = ctx.url.pathname.split("/").at(-1);
+});
 
+
+router.get("/", async ctx => ctx.data = [...Deno.readDirSync("./static/upload")].map(item => item.name));
 
 
 

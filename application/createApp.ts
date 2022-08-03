@@ -16,10 +16,7 @@ export default () => {
 
     ctx.method = ctx.request.method.toLowerCase();
 
-
-
     ctx.headers = new Headers();
-
 
     ctx.url.pathname == "/" && (ctx.url.pathname = "/index.html");
     ctx.ext = ctx.url.pathname.split(".")[1];
