@@ -10,7 +10,7 @@ export default (path="") => {
       const regUrl = new RegExp(url.replace(/:[^\/]*/gmsi, "([^\/]*)"));
       const urlMatched = regUrl.exec(url) ?? [];
       middleware.forEach(fn => use(async (ctx, next) => {
-        const pathname = encodeURI(ctx.url.pathname);
+        const pathname = ctx.url.pathname;
         if (!regUrl.test(pathname) || ctx.method != method) return await next();
         const pathMatched = regUrl.exec(pathname) ?? [];
         ctx.param ??= {};

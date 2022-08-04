@@ -1,5 +1,6 @@
 import { serve, ServeInit } from "std/http/server.ts";
 import { createCompose, middleware } from "./createCompose.ts";
+import contentType from "./contentType.ts";
 import toString from "./toString.ts";
 import trying from "./trying.ts";
 
@@ -10,7 +11,6 @@ export default () => {
   use(async ctx => {
 
     ctx.url = new URL(ctx.request.url);
-
     ctx.query = {};
     ctx.url.searchParams.forEach((val, key) => ctx.query[key] = val);
 
@@ -48,23 +48,14 @@ export default () => {
 
   final(async ctx => {
     if (["[object Array]", "[object Object]"].includes(toString(ctx.data))) {
-      ctx.headers.set("Content-Type", "application/json;charset=utf-8");
-      ctx.data = await trying(() => JSON.stringify(ctx.data)).catch(() => ctx.data);
+      await trying(() => {
+        ctx.data = JSON.stringify(ctx.data);
+        ctx.headers.set("Content-Type", "application/json;charset=utf-8");
+      }).catch(() => {});
     }
     else if (toString(ctx.data) == "[object String]") ctx.headers.set("Content-Type", "text/plain;charset=utf-8");
 
-    else if (toString(ctx.data) == "[object Uint8Array]") {
-      const ext = ctx.ext;
-
-      const contentType = ext == "html" ? "text/html"
-      : ext == "css" ? "text/css"
-      : ext == "js" ? "application/javascript"
-      : ext == "png" ? "image/png"
-      : ext == "ico" ? "image/x-icon"
-      : ext == "jpg" ? "image/jpeg"
-      : "text/plain"
-      ctx.headers.set("content-type", contentType + ";charset=utf-8");
-    }
+    else if (toString(ctx.data) == "[object Uint8Array]") ctx.headers.set("Content-Type", contentType[`.${ctx.ext}`] ?? "text/plain");
   });
 
   return {

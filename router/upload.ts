@@ -17,7 +17,7 @@ router.post("/", async ctx => {
   ctx.data = [];
   for (const file of files) {
     const arrayBuffer = await file.arrayBuffer();
-    await Deno.writeFile(`./static/upload/${file.name}`, new Uint8Array(arrayBuffer));
+    await Deno.writeFile(`./static/upload/${encodeURI(file.name)}`, new Uint8Array(arrayBuffer));
     ctx.data.push(file.name);
   }
   
