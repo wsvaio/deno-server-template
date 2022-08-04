@@ -14,7 +14,7 @@ export default (path="") => {
         if (!regUrl.test(pathname) || ctx.method != method) return await next();
         const pathMatched = regUrl.exec(pathname) ?? [];
         ctx.param ??= {};
-        for (let i = 1; i < pathMatched.length; i++) ctx.param[urlMatched[i].substring(1)] = pathMatched[i];
+        for (let i = 1; i < pathMatched.length; i++) ctx.param[urlMatched[i].substring(1)] = encodeURI(pathMatched[i]);
         const auto = fn.length <= 1;
         await fn(<ctx & param>ctx, next);
         auto && await next();
