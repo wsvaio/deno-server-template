@@ -9,8 +9,6 @@ export default (path="") => {
       url = (path + url).replace(/\/$/, "");
       const regUrl = new RegExp(url.replace(/:[^\/]*/gmsi, "([^\/]*)"));
       const urlMatched = regUrl.exec(url) ?? [];
-
-
       middleware.forEach(fn => use(async (ctx, next) => {
         const pathname = ctx.url.pathname;
         if (!regUrl.test(pathname) || ctx.method != method) return await next();
@@ -27,9 +25,10 @@ export default (path="") => {
   return {
     get: methodUse("get"),
     put: methodUse("put"),
-    del: methodUse("del"),
+    del: methodUse("delete"),
     post: methodUse("post"),
     patch: methodUse("patch"),
+    delete: methodUse("delete"),
 
     use, error, final,
     useList, errorList, finalList,

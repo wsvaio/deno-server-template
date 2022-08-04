@@ -24,7 +24,7 @@ router.post("/", async ctx => {
   
 });
 
-router.del("/*", async ctx => {
+router.del("/.*", async ctx => {
   await Deno.remove("./static" + ctx.url.pathname);
   ctx.data = ctx.url.pathname.split("/").at(-1);
 });
