@@ -1,2 +1,3 @@
 mongo/index.ts
-
+static/upload
+static/log
