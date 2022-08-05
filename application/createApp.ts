@@ -41,6 +41,7 @@ export default () => {
   error(async ctx => {
     ctx.data = ctx.error.message ?? ctx.data ?? "Error";
     ctx.status = ctx.error.status ?? ctx.status ?? 500;
+    
   });
 
   final(async ctx => {
