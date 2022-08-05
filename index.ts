@@ -21,7 +21,7 @@ app.use(async ctx => {
 });
 
 
-app.plugin(user, upload, log, webhook);
+app.plugin(webhook, user, upload, log);
 
 app.use(createStatic("./static"));
 
