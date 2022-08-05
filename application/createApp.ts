@@ -58,7 +58,7 @@ export default () => {
     }
     else if (toString(ctx.data) == "[object String]") ctx.headers.set("Content-Type", "text/plain;charset=utf-8");
 
-    else if (toString(ctx.data) == "[object Uint8Array]") ctx.headers.set("Content-Type", contentType[`.${ctx.ext}`] ?? "text/plain;charset=utf-8");
+    else if (toString(ctx.data) == "[object Uint8Array]") ctx.headers.set("Content-Type", contentType[`.${ctx.ext};charset=utf-8`] ?? "text/plain;charset=utf-8");
   });
 
   return {
