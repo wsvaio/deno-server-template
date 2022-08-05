@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WS</title>
+    <style>
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <script>
+
+
+      // 奏乐
+      Audio.prototype.start = function() {
+        this.status = "start";
+        clearInterval(this.timer);
+        this.currentTime = 0;
+        this.volume = 1;
+        this.play();
+      }
+      // 结束奏乐
+      Audio.prototype.end = function() {
+
+        this.status = "end";
+        clearInterval(this.timer);
+        // 音乐渐隐
+        this.timer = setInterval(() => {
+          let volume = this.volume - 0.1;
+          if (volume < 0) {
+            this.volume = 0;
+            clearInterval(this.timer);
+          } else {
+            this.volume = volume;
+          }
+        }, 50);
+      }
+
+      // 高低音索引
+      let index = 4;
+      // 黑键还是白键
+      let color = "white";
+      // 数字与键名映射
+      let scale = {
+        "0": "B",
+        "1": "C",
+        "2": "D",
+        "3": "E",
+        "4": "F",
+        "5": "G",
+        "6": "A",
+        "7": "B",
+        "8": "C",
+        "9": "D"
+      };
+      // 本地音频
+      let sound = {
+        "C9": new Audio("./sound/C9.wav")
+      }
+      // 初始化音频
+      for (let i = 1; i <= 8; i++) {
+        for (let j = 1; j<= 7; j++) {
+
+          if (i === 1 && ! [6, 7].includes(j)) continue;
+
+          let src = `./sound/${scale[j]}${i}`;
+          let name = `${scale[j]}${i}`;
+
+          if ([1, 2, 4, 5, 6].includes(j)) {
+            sound[`${name}_`] = new Audio(`./sound/${name}_.wav`);   
+          }
+
+          sound[`${name}`] = new Audio(`./sound/${name}.wav`);          
+
+        }
+      }
+
+      // 琴键按下
+      window.addEventListener("keydown", (event) => {
+        let { key, code } = event;
+        // 空格控制黑白键
+        if (code === "Space") return color = "black";
+        // 顶部数字键控制高低音
+        if (/Digit\d/.test(code)) {
+          // 停止正在奏乐的音频（切换后无法控制“键起”事件，所以切换前先停止所有音频）
+          for (let audio of Object.values(sound)) {
+            if (audio.status === "start") {
+              audio.end();
+            }
+          }
+          // 改变高低音索引
+          return index = key;
+        }
+        // 排除其他按键
+        if (!/Numpad\d/.test(code)) return;
+
+        // 奏乐
+        let audio = sound[`${scale[key]}${index}${color === "white" ? "" : "_"}`];
+        if (! audio || audio.status === "start" ) return;
+        audio.start();
+
+
+        
+      });
+
+      // 琴键抬起
+      window.addEventListener("keyup", (event) => {
+        let { key, code } = event;
+        // 空格控制黑白键
+        if (code === "Space") return color = "white";
+
+        // 排除其他按键
+        if (!/Numpad\d/.test(code)) return;
+
+        // 停止奏乐
+        let audio = sound[`${scale[key]}${index}${color === "white" ? "" : "_"}`];
+        if (! audio) return;
+        audio.end();
+          
+        
+      });
+
+
+
+
+    </script>
+
+  </body>
+
+</html>
