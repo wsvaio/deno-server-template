@@ -7,7 +7,7 @@ export default (path="") => {
   function methodUse(method: string) {
     return (url: string, ...middleware: middleware<ctx & param>[]) => {
       url = (path + url).replace(/\/$/, "");
-      const regUrl = new RegExp(url.replace(/:[^\/]*/gmsi, "([^\/]*)"));
+      const regUrl = new RegExp(url.replace(/:[^\/]*/gmsi, "([^\/]*)") + "$", "s");
       const urlMatched = regUrl.exec(url) ?? [];
       middleware.forEach(fn => use(async (ctx, next) => {
         const pathname = ctx.url.pathname;

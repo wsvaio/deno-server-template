@@ -24,4 +24,8 @@ type ctx = {
 
   
   
-} & obj;
+} & obj & {
+
+  user: obj;
+  auth: () => Promise<any>;
+};

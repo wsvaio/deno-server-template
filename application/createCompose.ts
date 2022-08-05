@@ -15,8 +15,8 @@ export async function onion(ctx: any, ...middleware: middleware[]) {
 export function createCompose<ctx = any>() {
 
   const useList: middleware<ctx>[] = [];
-  const errorList: middleware<ctx & { error: Error; }>[] = [];
-  const finalList: middleware<ctx & { error?: Error; }>[] = [];
+  const errorList: middleware<ctx & { error: Error & { [k: string]: any }; }>[] = [];
+  const finalList: middleware<ctx & { error?: Error & { [k: string]: any }; }>[] = [];
 
   function plugin(...plugins: plugins<ctx>) {
     for (const item of plugins) {

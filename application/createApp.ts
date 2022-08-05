@@ -19,7 +19,7 @@ export default () => {
     ctx.headers = new Headers();
 
     ctx.url.pathname == "/" && (ctx.url.pathname = "/index.html");
-    ctx.ext = ctx.url.pathname.split(".")[1];
+    ctx.ext = ctx.url.pathname.split(".").reverse()[0];
 
   });
 
@@ -36,10 +36,11 @@ export default () => {
       ctx.body = await trying(() => JSON.parse(ctx.body)).catch(() => ctx.body);
     }
   })
+  
 
   error(async ctx => {
-    ctx.data ??= ctx.error.message;
-    ctx.status ??= 500;
+    ctx.data = ctx.error.message ?? ctx.data ?? "Error";
+    ctx.status = ctx.error.status ?? ctx.status ?? 500;
   });
 
   final(async ctx => {
@@ -47,6 +48,7 @@ export default () => {
   });
 
   final(async ctx => {
+    
     if (["[object Array]", "[object Object]"].includes(toString(ctx.data))) {
       await trying(() => {
         ctx.data = JSON.stringify(ctx.data);
