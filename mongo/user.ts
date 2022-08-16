@@ -9,6 +9,9 @@ interface UserSchema {
   _id: ObjectId;
   username: string;
   password: string;
+
+  created_at: Date;
+  updated_at: Date;
 }
 
 

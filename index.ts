@@ -5,6 +5,11 @@ import log from "./router/log.ts";
 import webhook from "./router/webhook.ts";
 import createStatic from "./application/createStatic.ts";
 
+import article from "./router/article.ts";
+import tag from "./router/tag.ts";
+import remove from "./application/remove.ts";
+import toString from "./application/toString.ts";
+
 const app = createApp();
 
 
@@ -20,8 +25,8 @@ app.use(async ctx => {
   // ctx.headers.set("Access-Control-Allow-Methods", "*");
 });
 
-
-app.plugin(webhook, user, upload, log);
+// app.use(async ctx => ["[object Object]"].includes(toString(ctx.body)) && remove(ctx.body, "updated_at", "created_at", "_id"));
+app.plugin(webhook, user, article, tag, upload, log);
 
 app.use(createStatic("./static"));
 

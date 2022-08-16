@@ -5,22 +5,27 @@
  * del: 是否删除obj1中obj2不存在的key
  * rtn: 是否返回obj1
  */
-export default function merge<T>(obj1: T, obj2 = <Partial<T> & { [k: string]: any }>{}, { deep = 1, overwrite = true, del = false, rtn = true } = {}) {
+
+// 递归可选
+export type DeepPartial<T> = T extends Object
+? { [P in keyof T]?: DeepPartial<T[P]> }
+: T;
+
+export default function merge<T>(obj1: T, obj2 = <DeepPartial<T> | T>{}, { deep = 1, overwrite = true, del = false, rtn = true } = {}) {
   deep--;
   if (del) {
     const dels = Object.keys(obj1).filter(item => !Object.keys(obj2).includes(item));
     for (const key of dels) delete obj1[key];
   }
   for (const [key, val] of Object.entries(obj2)) {
-    if (!overwrite && (obj1[key] ?? false) !== false) continue;
-    if (val instanceof Object && deep > 0) {
-      (obj1[key] instanceof Object) || (obj1[key] = {});
+    if (!overwrite && ![null, undefined].includes(obj1[key])) continue;
+    if (typeof val == "object" && deep > 0) {
+      (typeof obj1[key] == "object") || (obj1[key] = {});
       merge(obj1[key], val, { deep, overwrite, del, rtn });
     } else {
       obj1[key] = val;
     }
   }
-  return rtn ? "" : obj1;
+  return rtn ? obj1 : "";
 }
-
 

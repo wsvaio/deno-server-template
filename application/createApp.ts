@@ -12,7 +12,7 @@ export default () => {
 
     ctx.url = new URL(ctx.request.url);
     ctx.query = {};
-    ctx.url.searchParams.forEach((val, key) => ctx.query[key] = val);
+    ctx.url.searchParams.forEach((v, k) => ctx.query[k] = v);
 
     ctx.method = ctx.request.method.toLowerCase();
 
