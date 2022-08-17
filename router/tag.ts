@@ -17,13 +17,13 @@ router.post("/", async (ctx) => {
 router.get("/", async (ctx) => {
 	const { page = 1, pageSize = 10, key = "" } = ctx.query;
 	const items = await tag.find({
-    name: { $regex: key }
+    name: { $regex: new RegExp(key, "i") }
   }, {
     skip: (page - 1) * pageSize,
     limit: +pageSize,
     sort: {_id: 1},
   }).toArray();
-	const count = await tag.countDocuments({ name: { $regex: key } });
+	const count = await tag.countDocuments({ name: { $regex: new RegExp(key, "i") } });
 	ctx.data = { page, pageSize, items, count };
 });
 

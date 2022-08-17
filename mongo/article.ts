@@ -5,11 +5,11 @@ import { MongoClient, ObjectId, Timestamp } from "mongo/mod.ts";
 
 
 
-interface ArticleSchema {
+export interface ArticleSchema {
   _id: ObjectId;
   title: string;
   content: string;
-  tags: ObjectId[];
+  tag_ids: ObjectId[];
   created_at: Date;
   updated_at: Date;
 }

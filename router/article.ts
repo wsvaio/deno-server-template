@@ -1,8 +1,9 @@
 import createRouter from "../application/createRouter.ts";
-import article from "../mongo/article.ts";
-import { ObjectId } from "mongo/mod.ts";
+import article, { ArticleSchema } from "../mongo/article.ts";
+import { Filter, ObjectId } from "mongo/mod.ts";
 import omit from "../application/omit.ts";
 import pick from "../application/pick.ts";
+import tag from "../mongo/tag.ts";
 const router = createRouter("/article");
 
 router.post("/", async (ctx) => {
@@ -16,14 +17,23 @@ router.post("/", async (ctx) => {
 
 router.get("/", async (ctx) => {
 	const { page = 1, pageSize = 10, key = "" } = ctx.query;
-	const items = await article.find({
-		content: {$regex: key}
-	}, {
+	const tag_ids = await tag.find({ name: { $regex: new RegExp(key, 'i') } }).map(item => item._id.toString());
+	const filter: Filter<ArticleSchema> = {
+		$or: [
+			{
+				title: {$regex: new RegExp(key, 'i')},
+			},
+			{
+				tag_ids: { $elemMatch: { $in: tag_ids } }
+			}
+		],
+	}
+	const items = await article.find(filter, {
 		skip: (page - 1) * pageSize,
 		limit: +pageSize,
 		sort: {id: 1},
 	}).toArray();
-	const count = await article.countDocuments({content: {$regex: key}});
+	const count = await article.countDocuments(filter);
 	ctx.data = { page, pageSize, items, count };
 });
 
