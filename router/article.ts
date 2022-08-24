@@ -37,6 +37,11 @@ router.get("/", async (ctx) => {
 	ctx.data = { page, pageSize, items, count };
 });
 
+router.get("/:_id", async ctx => {
+	
+	ctx.data = await article.findOne({ _id: new ObjectId(ctx.param._id) });
+})
+
 router.del("/", async (ctx) => {
 	const _ids = ctx.url.searchParams.getAll("_ids").map((_id) => new ObjectId(_id));
 	ctx.data = await article.deleteMany({ _id: { $in: _ids } });
