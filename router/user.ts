@@ -5,7 +5,7 @@ import to from "../application/to.ts";
 import merge from "../application/merge.ts";
 import remove from "../application/remove.ts";
 
-const router = createRouter("/user");
+const router = createRouter("/api/user");
 
 const key = await crypto.subtle.generateKey({ name: "HMAC", hash: "SHA-512" }, true, ["sign", "verify"]);
 const header: Header = { alg: "none" };

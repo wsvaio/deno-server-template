@@ -3,7 +3,7 @@ import tag from "../mongo/tag.ts";
 import { ObjectId } from "mongo/mod.ts";
 import omit from "../application/omit.ts";
 import pick from "../application/pick.ts";
-const router = createRouter("/tag");
+const router = createRouter("/api/tag");
 
 router.post("/", async (ctx) => {
 	const date = new Date();

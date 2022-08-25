@@ -18,8 +18,8 @@ export default () => {
 
     ctx.headers = new Headers();
 
-    ctx.url.pathname == "/" && (ctx.url.pathname = "/index.html");
-    ctx.ext = ctx.url.pathname.split(".").reverse()[0];
+    // ctx.url.pathname == "/" && (ctx.url.pathname = "/index.html");
+    ctx.ext = ctx.url.pathname.indexOf(".") != -1 ? ctx.url.pathname.split(".").reverse()[0] : "";
 
   });
 
@@ -49,7 +49,6 @@ export default () => {
   });
 
   final(async ctx => {
-    
     if (["[object Array]", "[object Object]"].includes(toString(ctx.data))) {
       await trying(() => {
         ctx.data = JSON.stringify(ctx.data);

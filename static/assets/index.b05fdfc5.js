@@ -1,0 +1,1 @@
+import{d as t,ak as a,G as n,H as o}from"./index.9e90613e.js";const s={class:"about"},m=t({__name:"index",setup(c){const e=a();return e.banner_title="ABOUT",(r,_)=>(n(),o("div",s," about "))}});export{m as default};

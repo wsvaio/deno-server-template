@@ -3,7 +3,7 @@ import toString from "../application/toString.ts";
 import merge from "../application/merge.ts";
 
 
-const router = createRouter("/upload");
+const router = createRouter("/api/upload");
 
 
 

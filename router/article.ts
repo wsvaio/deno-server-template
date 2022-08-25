@@ -4,7 +4,7 @@ import { Filter, ObjectId } from "mongo/mod.ts";
 import omit from "../application/omit.ts";
 import pick from "../application/pick.ts";
 import tag from "../mongo/tag.ts";
-const router = createRouter("/article");
+const router = createRouter("/api/article");
 
 router.post("/", async (ctx) => {
 	const date = new Date();
